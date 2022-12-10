@@ -18,15 +18,15 @@ intents = discord.Intents.default()
 # Create a Discord bot
 client = commands.Bot(command_prefix = '!', intents=intents)
 
+# When the bot is ready, print a message to the console
 @client.event
 async def on_ready():
-    # Indented code goes here
     print('Bot is ready!')
 
 # Define a command that the bot can respond to
 @client.command()
 async def sports_alert(ctx):
-    
+    # Indented code goes here
 
 # Process any messages that are sent to the bot
 @client.event
