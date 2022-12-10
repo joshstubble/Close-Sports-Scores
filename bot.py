@@ -1,65 +1,92 @@
 import discord
+from discord.ext import commands
 import requests
 import time
 import os
+from bs4 import BeautifulSoup
 
-# Create a new Discord bot
+# Create a Discord bot
 client = commands.Bot(command_prefix = '!')
 
+# When the bot is ready, print a message to the console
 @client.event
 async def on_ready():
     print('Bot is ready!')
 
+# Define a command that the bot can respond to
 @client.command()
 async def sports_alert(ctx):
-    # Get the Discord bot token from the environment variable
-    bot_token = os.environ['DISCORD_BOT_TOKEN']
+    # Define a dictionary that maps league names to their respective ESPN URLs and close game criteria
+    leagues = {
+        'NFL': {
+            'url': 'http://www.espn.com/nfl/scoreboard',
+            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 7 and time_remaining == '4th'
+        },
+        'NBA': {
+            'url': 'http://www.espn.com/nba/scoreboard',
+            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
+        },
+        'NCAAF': {
+            'url': 'http://www.espn.com/college-football/scoreboard',
+            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 7 and time_remaining == '4th'
+        },
+        'MLB': {
+            'url': 'http://www.espn.com/mlb/scoreboard',
+            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 2 and inning_num >= 8
+        },
+        'NCAAB': {
+            'url': 'http://www.espn.com/mens-college-basketball/scoreboard',
+            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
+        }
+    }
+    
+    # Iterate over the leagues and extract the scores of each game
+    for league, info in leagues.items():
+        # Use the requests library to fetch the HTML of the ESPN scores page for the league
+        response = requests.get(info['url'])
 
-    # Get the ESPN API key from the environment variable
-    api_key = os.environ['ESPN_API_KEY']
+        # Parse the HTML using the BeautifulSoup library
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-    while True:
-        # Use the requests library to fetch information about NBA games
-        nba_games = requests.get('https://api.espn.com/v1/sports/basketball/nba/events', headers={'Authorization': f'Bearer {api_key}'})
+        # Find all the elements on the page with the 'scoreboard-container' class
+        containers = soup.find_all(class_='scoreboard-container')
 
-        # Use the requests library to fetch information about NFL games
-        nfl_games = requests.get('https://api.espn.com/v1/sports/football/nfl/events', headers={'Authorization': f'Bearer {api_key}'})
+        # Iterate over the containers and extract the scores of each game
+        for container in containers:
+            # Find the home team score
+            home_score = container.find(class_='home').find(class_='score').text
 
-        # Use the requests library to fetch information about MLB games
-        mlb_games = requests.get('https://api.espn.com/v1/sports/baseball/mlb/events', headers={'Authorization': f'Bearer {api_key}'})
-        
-        # Use the requests library to fetch information about NCAAB games
-        ncaab_games = requests.get('https://api.espn.com/v1/sports/basketball/ncaab/events', headers={'Authorization': f'Bearer {api_key}'})
+            # Find the away team score
+            away_score = container.find(class_='away').find(class_='score').text
 
-        # Use the requests library to fetch information about NCAAF games
-        ncaaf_games = requests.get('https://api.espn.com/v1/sports/football/ncaaf/events', headers={'Authorization': f'Bearer {api_key}'})
+            # Find the inning of the game (if applicable)
+            inning = container.find(class_='inning')
+            if inning:
+                # Parse the inning to get the number of the current inning
+                inning_num = int(inning.text.split(' ')[0])
+            else:
+                inning_num = None
 
-        # Iterate over the list of NBA games and check if any are close and near the end
-        for game in nba_games:
-            if game['score_difference'] < 5 and game['time_remaining'] < 120:
-                await ctx.send(f'Attention! The {game["home_team"]} vs {game["away_team"]} game is close and about to end!')
+            # Find the time remaining in the game
+            time_remaining = container.find(class_='time-left').text.split(' ')[1]
 
-        # Iterate over the list of NFL games and check if any are close and near the end
-        for game in nfl_games:
-            if game['score_difference'] < 5 and game['time_remaining'] < 120:
-                await ctx.send(f'Attention! The {game["home_team"]} vs {game["away_team"]} game is close and about to end!')
+            # Find the number of minutes remaining in the quarter (if applicable)
+            minutes = container.find(class_='time-left').text.split(':')[0]
+            if minutes:
+                minutes = int(minutes)
+            else:
+                minutes = None
 
-        # Iterate over the list of MLB games and check if any are close and near the end
-        for game in mlb_games:
-            if game['score_difference'] < 5 and game['time_remaining'] < 120:
-                await ctx.send(f'Attention! The {game["home_team"]} vs {game["away_team"]} game is close and about to end!')
-                
-        # Iterate over the list of NCAAB games and check if any are close and near the end
-        for game in ncaab_games:
-            if game['score_difference'] < 5 and game['time_remaining'] < 120:
-                await ctx.send(f'Attention! The {game["home_team"]} vs {game["away_team"]} game is close and about to end!')
+            # Check if the game is close according to the criteria for the league
+            if info['is_close'](home_score, away_score, time_remaining, inning_num, minutes):
+                # Send a message to the Discord channel with the scores of the game
+                await ctx.send(f'Attention! The {league game between the {home_team} and {away_team} is close! Home: {home_score}, Away: {away_score}')
 
-        # Iterate over the list of NCAAF games and check if any are close and near the end
-        for game in ncaaf_games:
-            if game['score_difference'] < 5 and game['time_remaining'] < 120:
-                await ctx.send(f'Attention! The {game["home_team"]} vs {game["away_team"]} game is close and about to end!')
+     # Sleep for 60 seconds
+     time.sleep(60)
 
-        # Sleep for 60 seconds
-        time.sleep(60)
+# Get the Discord bot token from the environment variable
+bot_token = os.environ['DISCORD_BOT_TOKEN']
 
+# Run the bot using the Discord bot token
 client.run(bot_token)
