@@ -14,8 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 # Create a Discord bot
-client = commands.Bot(command_prefix = '!')
-intents=discord.Intents.default())
+client = commands.Bot(command_prefix = '!', intents=discord.Intents)
 
 # When the bot is ready, print a message to the console
 @client.event
