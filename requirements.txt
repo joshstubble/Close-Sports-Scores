@@ -1,2 +1,3 @@
-discord
+discord.py
+beautifulsoup4
 requests
