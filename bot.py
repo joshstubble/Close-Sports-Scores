@@ -26,6 +26,16 @@ async def on_ready():
 # Define a command that the bot can respond to
 @client.command()
 async def sports_alert(ctx):
+
+@client.event
+async def on_message(message):
+    # Ignore messages from the bot itself
+    if message.author == client.user:
+        return
+
+    # Process any commands that are sent to the bot
+    await client.process_commands(message)
+    
     # Define a dictionary that maps league names to their respective ESPN URLs and close game criteria
     leagues = {
         'NFL': {
