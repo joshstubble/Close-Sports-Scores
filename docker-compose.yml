@@ -6,4 +6,4 @@ services:
       - .:/app
     env_file:
       - .env
-    command: python bot.py
+    
