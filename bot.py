@@ -26,6 +26,7 @@ async def on_ready():
 # Define a command that the bot can respond to
 @client.command()
 async def sports_alert(ctx):
+    
 
 # Process any messages that are sent to the bot
 @client.event
