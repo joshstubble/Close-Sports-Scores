@@ -88,7 +88,7 @@ async def sports_alert(ctx):
             # Check if the game is close according to the criteria for the league
             if info['is_close'](home_score, away_score, time_remaining, inning_num, minutes):
                 # Send a message to the Discord channel with the scores of the game
-                await ctx.send(f'Attention! The {league game between the {home_team} and {away_team} is close! Home: {home_score}, Away: {away_score}')
+                await ctx.send(f'Attention! The {league game between the {home_team} and {away_team} is close! Home: {home_score}, Away: {away_score}'),
 
      # Sleep for 60 seconds
      time.sleep(60)
