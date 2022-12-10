@@ -28,8 +28,8 @@ async def on_ready():
 async def sports_alert(ctx):
     # Indented code goes here
 
-    # Process any messages that are sent to the bot
- @client.event
+# Process any messages that are sent to the bot
+@client.event
 async def on_message(message):
     # Ignore messages from the bot itself
     if message.author == client.user:
