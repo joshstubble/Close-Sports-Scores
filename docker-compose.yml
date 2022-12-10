@@ -1,9 +1,9 @@
 version: '3'
+
 services:
-  bot:
+  espn-bot:
     build: .
     volumes:
       - .:/app
-    env_file:
-      - .env
-    
+    environment:
+      - DISCORD_BOT_TOKEN
