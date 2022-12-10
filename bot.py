@@ -12,9 +12,11 @@ logging.basicConfig(level=logging.INFO)
 # Create a logger that will be used to log messages
 logger = logging.getLogger(__name__)
 
+# Create an instance of the Intents class with the default set of privileged intents
+intents = discord.Intents.default()
 
 # Create a Discord bot
-client = commands.Bot(command_prefix = '!', intents=discord.Intents.default())
+client = commands.Bot(command_prefix = '!', intents=intents)
 
 # When the bot is ready, print a message to the console
 @client.event
