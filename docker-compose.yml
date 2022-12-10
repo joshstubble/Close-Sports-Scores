@@ -7,3 +7,4 @@ services:
       - .:/app
     environment:
       - DISCORD_BOT_TOKEN
+    restart: always
