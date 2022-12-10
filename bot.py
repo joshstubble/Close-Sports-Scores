@@ -3,7 +3,15 @@ from discord.ext import commands
 import requests
 import time
 import os
+import logging
 from bs4 import BeautifulSoup
+
+# Set the logging level to INFO, so that only messages with a severity of INFO or higher will be logged
+logging.basicConfig(level=logging.INFO)
+
+# Create a logger that will be used to log messages
+logger = logging.getLogger(__name__)
+
 
 # Create a Discord bot
 client = commands.Bot(command_prefix = '!')
