@@ -23,15 +23,29 @@ async def on_ready():
     # Indented code goes here
     print('Bot is ready!')
 
-# Process any messages that are sent to the bot
+Yes, you can use the message.channel property to get the channel object that the message was sent in, and then use the send() method on that channel object to send messages. Here's an example:
+
+Copy code
 @client.event
 async def on_message(message):
-    # Ignore messages from the bot itself
     if message.author == client.user:
         return
 
-    # Process any commands that are sent to the bot
-    await client.process_commands(message)
+    if message.content.startswith('!startscores'):
+        # Get the channel object that the message was sent in
+        channel = message.channel
+
+        # Use a while loop to keep sending messages until the `!stopscores` command is received
+        while True:
+            # Check if the `!stopscores` command has been received
+            if message.content == '!stopscores':
+                break
+
+            # Use the `send()` method to send a message to the channel
+            await channel.send('This is an example of a message that the bot would send')
+
+            # Sleep for a few seconds before sending the next message
+            time.sleep(5)
 
 # Define a command that the bot can respond to
 @client.command()
