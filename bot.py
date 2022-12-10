@@ -24,11 +24,6 @@ def on_ready():
     # Indented code goes here
     print('Bot is ready!')
 
-# Define a command that the bot can respond to
-@client.command()
-async def sports_alert(ctx):
-    # Indented code goes here
-
 # Process any messages that are sent to the bot
 @client.event
 async def on_message(message):
@@ -38,6 +33,12 @@ async def on_message(message):
 
     # Process any commands that are sent to the bot
     await client.process_commands(message)
+
+# Define a command that the bot can respond to
+@client.command()
+async def sports_alert(ctx):
+    # Indented code goes here
+
     
     # Define a dictionary that maps league names to their respective ESPN URLs and close game criteria
     leagues = {
