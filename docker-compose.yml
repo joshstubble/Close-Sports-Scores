@@ -1,11 +1,9 @@
 version: '3'
-
 services:
   bot:
     build: .
     volumes:
       - .:/app
-    environment:
-      - DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
-      - THESCORE_API_KEY=YOUR_API_KEY
+    env_file:
+      - .env
     command: python bot.py
