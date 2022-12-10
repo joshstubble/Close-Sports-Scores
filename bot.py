@@ -20,7 +20,7 @@ client = commands.Bot(command_prefix = '!', intents=intents)
 
 # When the bot is ready, print a message to the console
 @client.event
-async def on_ready():
+def on_ready():
     # Indented code goes here
     print('Bot is ready!')
 
@@ -30,11 +30,11 @@ async def sports_alert(ctx):
     # Indented code goes here
 
 # Process any messages that are sent to the bot
-    @client.event
-    async def on_message(message):
+@client.event
+async def on_message(message):
     # Ignore messages from the bot itself
     if message.author == client.user:
-    return
+        return
 
     # Process any commands that are sent to the bot
     await client.process_commands(message)
