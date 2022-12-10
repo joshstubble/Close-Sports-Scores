@@ -96,8 +96,8 @@ async def sports_alert(ctx):
             # Send a message to the Discord channel with the scores of the game
              await ctx.send('Attention. (Game between the {} and {} is close and about to end!)'.format(home_team, away_team))
 
-     # Sleep for 60 seconds
-     time.sleep(60)
+            # Sleep for 60 seconds
+             time.sleep(60)
 
 # Get the Discord bot token from the environment variable
 bot_token = os.environ['DISCORD_BOT_TOKEN']
