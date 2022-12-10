@@ -25,7 +25,7 @@ async def on_ready():
 
 # Define a command that the bot can respond to
 @client.command()
-async def sports_alert(ctx):
+async def sports_alert(ctx):    
 
 @client.event
 async def on_message(message):
