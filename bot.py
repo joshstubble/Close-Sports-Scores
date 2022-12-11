@@ -23,9 +23,6 @@ async def on_ready():
     # Indented code goes here
     print('Bot is ready!')
 
-Yes, you can use the message.channel property to get the channel object that the message was sent in, and then use the send() method on that channel object to send messages. Here's an example:
-
-Copy code
 @client.event
 async def on_message(message):
     if message.author == client.user:
