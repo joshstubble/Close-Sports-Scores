@@ -48,9 +48,6 @@ async def on_message(message):
 @client.command()
 async def sports_alert(ctx):
     # Indented code goes here
-
-    
-    # Define a dictionary that maps league names to their respective ESPN URLs and close game criteria
     leagues = {
         'NFL': {
             'url': 'http://www.espn.com/nfl/scoreboard',
@@ -72,58 +69,46 @@ async def sports_alert(ctx):
             'url': 'http://www.espn.com/mens-college-basketball/scoreboard',
             'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
         }
-    }
-    
+}
+@client.command()
+async def sports_alert(ctx, leagues):
     # Iterate over the leagues and extract the scores of each game
     for league, info in leagues.items():
-        # Use the requests library to fetch the HTML of the ESPN scores page for the league
+    # Use the requests library to fetch the HTML of the ESPN scores page for the league
+        response = requests.get(info['url'])
+    # Iterate over the leagues and extract the scores of each game
+    for league, info in leagues.items():
+    # Use the requests library to fetch the HTML of the ESPN scores page for the league
         response = requests.get(info['url'])
 
-        # Parse the HTML using the BeautifulSoup library
-        soup = BeautifulSoup(response.text, 'html.parser')
+    # Parse the HTML using the BeautifulSoup library
+    soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Find all the elements on the page with the 'scoreboard-container' class
-        containers = soup.find_all(class_='scoreboard-container')
+    # Find all the elements on the page with the 'scoreboard-container' class
+    containers = soup.find_all(class_='scoreboard-container')
 
-        # Iterate over the containers and extract the scores of each game
-        for container in containers:
-            # Find the home team score
-            home_score = container.find(class_='home').find(class_='score').text
+    # Iterate over the containers and extract the scores of each game
+    for container in containers:
+        # Find the minutes remaining in the game
+        minutes = container.find(class_='minutes').text
+        
+        # Find the inning number
+        innings = container.find(class_='innings').text
+        
+        # Find the home team score
+        home_score = container.find(class_='home').find(class_='score').text
 
-            # Find the away team score
-            away_score = container.find(class_='away').find(class_='score').text
+        # Find the away team score
+        away_score = container.find(class_='away').find(class_='score').text
 
-            # Find the inning of the game (if applicable)
-            inning = container.find(class_='inning')
-            if inning:
-                # Parse the inning to get the number of the current inning
-                inning_num = int(inning.text.split(' ')[0])
-            else:
-                inning_num = None
+        # Find the time remaining in the game
+        time_remaining = container.find(class_='time-remaining').text
 
-            # Find the time remaining in the game
-            time_remaining = container.find(class_='time-left').text.split(' ')[1]
+        # Check if the game is considered "close" based on the criteria defined in the `leagues` dictionary
+        if info['is_close'](home_score, away_score, time_remaining):
+            # If the game is close, send a message to the channel with the teams and scores
+            await ctx.send(f"{league}: {home_score} - {away_score}")
 
-            # Find the number of minutes remaining in the quarter (if applicable)
-            minutes = container.find(class_='time-left').text.split(':')[0]
-            if minutes:
-                minutes = int(minutes)
-            else:
-                minutes = None
-
-            # Find the home team name
-            home_team = container.find(class_='home').find(class_='team-name').text
-
-            # Find the away team name
-            away_team = container.find(class_='away').find(class_='team-name').text
-            
-            # Check if the game is close according to the criteria for the league
-            if info['is_close'](home_score, away_score, time_remaining, inning_num, minutes):
-            # Send a message to the Discord channel with the scores of the game
-             await ctx.send('Attention. (Game between the {} and {} is close and about to end!)'.format(home_team, away_team))
-
-            # Sleep for 60 seconds
-             time.sleep(60)
 
 # Get the Discord bot token from the environment variable
 bot_token = os.environ['DISCORD_BOT_TOKEN']

@@ -1,11 +1,11 @@
-FROM python:3
+FROM python:3.8
 
+# Install the required packages
+RUN pip install discord requests beautifulsoup4
+
+# Copy the code to the container
+COPY . /app
 WORKDIR /app
 
-COPY requirements.txt .
-
-RUN pip install -r requirements.txt
-
-COPY bot.py .
-
+# Run the bot
 CMD ["python", "bot.py"]
