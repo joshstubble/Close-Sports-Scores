@@ -34,9 +34,18 @@ async def on_message(message):
 
         # Use a while loop to keep sending messages until the `!stopscores` command is received
         while True:
+            # Get the latest messages sent in the channel
+            messages = await channel.history(limit=1).flatten()
+
+            # Get the most recent message
+            message = messages[0]
+
             # Check if the `!stopscores` command has been received
             if message.content == '!stopscores':
                 break
+
+            # Use the `continue` keyword to immediately jump to the next iteration of the loop
+            continue
 
             # Use the `send()` method to send a message to the channel
             await channel.send('This is an example of a message that the bot would send')
