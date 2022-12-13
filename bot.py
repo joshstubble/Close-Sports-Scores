@@ -76,8 +76,8 @@ async def startscores(ctx):
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Find the home and away scores for the first game on the scoreboard
-        home_team_score_element = soup.select_one('ScoreCell__Score h4 clr-gray-01 fw-heavy tar ScoreCell_Score--scoreboard pl2')
-        away_team_score_element = soup.select_one('.away .score')
+        home_team_score_element = soup.select_one('.ScoreCell__Score h4.clr-gray-01.fw-heavy.tar.ScoreCell_Score--scoreboard.pl2')
+        away_team_score_element = soup.select_one('.ScoreCell__Score h4.clr-gray-01.fw-heavy.tal.ScoreCell_Score--scoreboard.pl2')
         home_score = home_team_score_element.text
         away_score = away_team_score_element.text
 
