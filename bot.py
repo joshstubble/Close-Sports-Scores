@@ -50,6 +50,11 @@ async def on_ready():
 async def startscores(ctx):
     # Get the channel object that the message was sent in
     channel = ctx.channel
+    # Get the name of the league from the command arguments
+    league_name = ctx.args[0]
+
+    # Get the info for the league from the `leagues` dictionary
+    league_info = leagues[league_name]
 
     # Send a confirmation message
     await channel.send('The `startscores` command has been received. The bot will now start sending messages.')
