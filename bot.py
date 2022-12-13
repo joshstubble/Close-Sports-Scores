@@ -57,7 +57,9 @@ async def startscores(ctx):
     # Use a while loop to keep sending messages until the `!stopscores` command is received
     while True:
         # Get the latest messages sent in the channel
-        messages = await channel.history(limit=1).list()
+        messages = []
+        async for message in channel.history(limit=1):
+            messages.append(message)
 
         # Get the most recent message
         message = messages[0]
