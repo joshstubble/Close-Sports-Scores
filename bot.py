@@ -44,9 +44,6 @@ async def on_message(message):
             if message.content == '!stopscores':
                 break
 
-            # Use the `continue` keyword to immediately jump to the next iteration of the loop
-            continue
-
             # Use the `send()` method to send a message to the channel
             await channel.send('This is an example of a message that the bot would send')
 
