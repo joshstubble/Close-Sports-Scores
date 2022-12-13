@@ -68,20 +68,20 @@ async def startscores(ctx):
         if message.content == '!stopscores':
             break
 
-        # Use the `send()` method to send a message to the channel
-        await channel.send('This is an example of a message that the bot would send')
+        # Check if any games are close
+        is_close = False
+        for league_name, league_info in leagues.items():
+            # Use the `is_close()` method to determine whether the game is close
+            if league_info['is_close'](home_score, away_score, time_remaining):
+                is_close = True
+                break
 
-        # Sleep for a few seconds before sending the next message
+        # If a close game was found, send a message
+        if is_close:
+            await channel.send('A close game was found!')
+
+        # Sleep for a few seconds before checking for close games again
         time.sleep(5)
-
-# Define a command that the bot can respond to
-@client.command()
-async def stopscores(ctx):
-    # Get the channel object that the message was sent in
-    channel = ctx.channel
-
-    # Send a confirmation message
-    await channel.send('The `stopscores` command has been received. The bot will now stop sending messages.')
 
 
 
