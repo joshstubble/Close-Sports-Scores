@@ -18,6 +18,29 @@ intents = discord.Intents.default()
 # Create a Discord bot
 client = commands.Bot(command_prefix = '!', intents=intents)
 
+leagues = {
+    'NFL': {
+        'url': 'http://www.espn.com/nfl/scoreboard',
+        'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 7 and time_remaining == '4th'
+    },
+    'NBA': {
+        'url': 'http://www.espn.com/nba/scoreboard',
+        'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
+    },
+    'NCAAF': {
+        'url': 'http://www.espn.com/college-football/scoreboard',
+        'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 7 and time_remaining == '4th'
+    },
+    'MLB': {
+        'url': 'http://www.espn.com/mlb/scoreboard',
+        'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 2 and inning_num >= 8
+    },
+    'NCAAB': {
+        'url': 'http://www.espn.com/mens-college-basketball/scoreboard',
+        'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
+    }
+}
+
 @client.event
 async def on_ready():
     # Log the "Bot is ready!" message using the logger object
@@ -46,28 +69,6 @@ async def startscores(ctx):
         # Sleep for a few seconds before sending the next message
         time.sleep(5)
 
-    leagues = {
-        'NFL': {
-            'url': 'http://www.espn.com/nfl/scoreboard',
-            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 7 and time_remaining == '4th'
-        },
-        'NBA': {
-            'url': 'http://www.espn.com/nba/scoreboard',
-            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
-        },
-        'NCAAF': {
-            'url': 'http://www.espn.com/college-football/scoreboard',
-            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 7 and time_remaining == '4th'
-        },
-        'MLB': {
-            'url': 'http://www.espn.com/mlb/scoreboard',
-            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 2 and inning_num >= 8
-        },
-        'NCAAB': {
-            'url': 'http://www.espn.com/mens-college-basketball/scoreboard',
-            'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
-        }
-}
 
 # Define a command that the bot can respond to
 @client.command()
