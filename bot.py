@@ -47,7 +47,7 @@ async def on_ready():
     logger.info('Bot is ready!')
 
 @client.command()
-async def startscores(ctx):
+async def startscores(ctx, league_name: str):
     # Get the channel object that the message was sent in
     channel = ctx.channel
     # Get the name of the league from the command arguments
