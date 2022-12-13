@@ -20,47 +20,32 @@ client = commands.Bot(command_prefix = '!', intents=intents)
 
 @client.event
 async def on_ready():
-    # Indented code goes here
-    print('Bot is ready!')
+    # Log the "Bot is ready!" message using the logger object
+    logger.info('Bot is ready!')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content == '!startscores':
-        # Get the channel object that the message was sent in
-        channel = message.channel
-
-        # Use a while loop to keep sending messages until the `!stopscores` command is received
-        while True:
-            # Get the latest messages sent in the channel
-            messages = await channel.history(limit=1).flatten()
-
-            # Get the most recent message
-            message = messages[0]
-
-            # Check if the `!stopscores` command has been received
-            if message.content == '!stopscores':
-                break
-
-            # Use the `send()` method to send a message to the channel
-            await channel.send('This is an example of a message that the bot would send')
-
-            # Sleep for a few seconds before sending the next message
-            time.sleep(5)
-
-# Define a command that the bot can respond to
 @client.command()
-async def sports_alert(ctx, leagues):
-    # Iterate over the leagues and extract the scores of each game
-    for league, info in leagues.items():
-    # Use the requests library to fetch the HTML of the ESPN scores page for the league
-        response = requests.get(info['url'])
-    # Iterate over the leagues and extract the scores of each game
-    for league, info in leagues.items():
-    # Use the requests library to fetch the HTML of the ESPN scores page for the league
-        response = requests.get(info['url'])
+async def startscores(ctx):
+    # Get the channel object that the message was sent in
+    channel = ctx.channel
+
+    # Use a while loop to keep sending messages until the `!stopscores` command is received
+    while True:
+        # Get the latest messages sent in the channel
+        messages = await channel.history(limit=1).flatten()
+
+        # Get the most recent message
+        message = messages[0]
+
+        # Check if the `!stopscores` command has been received
+        if message.content == '!stopscores':
+            break
+
+        # Use the `send()` method to send a message to the channel
+        await channel.send('This is an example of a message that the bot would send')
+
+        # Sleep for a few seconds before sending the next message
+        time.sleep(5)
+
     leagues = {
         'NFL': {
             'url': 'http://www.espn.com/nfl/scoreboard',
@@ -83,6 +68,19 @@ async def sports_alert(ctx, leagues):
             'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
         }
 }
+
+# Define a command that the bot can respond to
+@client.command()
+async def sports_alert(ctx, leagues):
+    # Iterate over the leagues and extract the scores of each game
+    for league, info in leagues.items():
+    # Use the requests library to fetch the HTML of the ESPN scores page for the league
+        response = requests.get(info['url'])
+    # Iterate over the leagues and extract the scores of each game
+    for league, info in leagues.items():
+    # Use the requests library to fetch the HTML of the ESPN scores page for the league
+        response = requests.get(info['url'])
+
     # Parse the HTML using the BeautifulSoup library
     soup = BeautifulSoup(response.text, 'html.parser')
 
