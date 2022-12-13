@@ -68,6 +68,23 @@ async def startscores(ctx):
         if message.content == '!stopscores':
             break
 
+        # Fetch the latest scores from the ESPN website
+        url = 'http://www.espn.com/nfl/scoreboard'
+        response = requests.get(url)
+
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Find the home and away scores for the first game on the scoreboard
+        home_team_score_element = soup.select_one('.home .score')
+        away_team_score_element = soup.select_one('.away .score')
+        home_score = home_team_score_element.text
+        away_score = away_team_score_element.text
+
+        # Find the time remaining in the first game on the scoreboard
+        time_remaining_element = soup.select_one('.game-status .time-remaining')
+        time_remaining = time_remaining_element.text
+
         # Check if any games are close
         is_close = False
         for league_name, league_info in leagues.items():
