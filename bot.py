@@ -7,7 +7,7 @@ import logging
 from bs4 import BeautifulSoup
 
 # Set the logging level to INFO, so that only messages with a severity of INFO or higher will be logged
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 # Create a logger that will be used to log messages
 logger = logging.getLogger(__name__)
