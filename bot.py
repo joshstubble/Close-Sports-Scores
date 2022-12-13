@@ -71,15 +71,14 @@ async def startscores(ctx):
 
 # Define a command that the bot can respond to
 @client.command()
-async def sports_alert(ctx, leagues):
-    # Iterate over the leagues and extract the scores of each game
-    for league, info in leagues.items():
-    # Use the requests library to fetch the HTML of the ESPN scores page for the league
-        response = requests.get(info['url'])
-    # Iterate over the leagues and extract the scores of each game
-    for league, info in leagues.items():
-    # Use the requests library to fetch the HTML of the ESPN scores page for the league
-        response = requests.get(info['url'])
+async def sports_alert(ctx, *league_names):
+    # Iterate over the league names and extract the scores for each league
+    for league_name in league_names:
+        # Get the info for the league from the `leagues` dictionary
+        league_info = leagues[league_name]
+
+        # Use the requests library to fetch the HTML of the ESPN scores page for the league
+        response = requests.get(league_info['url'])
 
     # Parse the HTML using the BeautifulSoup library
     soup = BeautifulSoup(response.text, 'html.parser')
