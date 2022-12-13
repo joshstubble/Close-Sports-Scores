@@ -115,6 +115,8 @@ async def sports_alert(ctx, *league_names):
 
     # Parse the HTML using the BeautifulSoup library
     soup = BeautifulSoup(response.text, 'html.parser')
+    # Print the parsed HTML to the console
+    print(soup.prettify())
 
     # Find all the elements on the page with the 'scoreboard-container' class
     containers = soup.find_all(class_='scoreboard-container')
