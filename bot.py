@@ -45,18 +45,14 @@ leagues = {
 async def on_ready():
     # Log the "Bot is ready!" message using the logger object
     logger.info('Bot is ready!')
-async def on_message(message):
-    # Check if the message content is '!startscores'
-    if message.content == '!startscores':
-        # Iterate over the `leagues` dictionary
-        for league_name, league_info in leagues.items():
-            # Call the `startscores` function for each league
-            await startscores(message.channel, league_name, league_info)
 
 @client.command()
-async def startscores(channel, league_name: str, league_info):
+async def startscores(ctx):
+    # Get the channel object that the message was sent in
+    channel = ctx.channel
+
     # Send a confirmation message
-    await channel.send(f'The `startscores` command has been received for {league_name}. The bot will now start sending messages.')
+    await channel.send('The `startscores` command has been received. The bot will now start sending messages.')
 
     # Use a while loop to keep sending messages until the `!stopscores` command is received
     while True:
@@ -72,37 +68,20 @@ async def startscores(channel, league_name: str, league_info):
         if message.content == '!stopscores':
             break
 
-        # Use the requests library to fetch the HTML of the ESPN scores page for the league
-        response = requests.get(league_info['url'])
+        # Use the `send()` method to send a message to the channel
+        await channel.send('This is an example of a message that the bot would send')
 
-        # Parse the HTML using the BeautifulSoup library
-        soup = BeautifulSoup(response.text, 'html.parser')
+        # Sleep for a few seconds before sending the next message
+        time.sleep(5)
 
-        # Find all the elements on the page with the 'scoreboard-container' class
-        containers = soup.find_all(class_='scoreboard-container')
+# Define a command that the bot can respond to
+@client.command()
+async def stopscores(ctx):
+    # Get the channel object that the message was sent in
+    channel = ctx.channel
 
-        # Iterate over the containers and extract the scores of each game
-        for container in containers:
-            # Find the minutes remaining in the game
-            minutes = container.find(class_='minutes').text
-        
-            # Find the inning number
-            innings = container.find(class_='innings').text
-        
-            # Find the home team score
-            home_score = container.find(class_='home').find(class_='score').text
-
-            # Find the away team score
-            away_score = container.find(class_='away').find(class_='score').text
-
-            # Find the time remaining in the game
-            time_remaining = container.find(class_='time-remaining').text
-
-        # Check if the game is considered "close" based on the criteria defined in the `leagues` dictionary
-        if info['is_close'](home_score, away_score, time_remaining):
-            # If the game is close, send a message to the channel with the teams and scores
-            await ctx.send(f"{league}: {home_score} - {away_score}")
-
+    # Send a confirmation message
+    await channel.send('The `stopscores` command has been received. The bot will now stop sending messages.')
 
 
 
