@@ -45,19 +45,18 @@ leagues = {
 async def on_ready():
     # Log the "Bot is ready!" message using the logger object
     logger.info('Bot is ready!')
+async def on_message(message):
+    # Check if the message content is '!startscores'
+    if message.content == '!startscores':
+        # Iterate over the `leagues` dictionary
+        for league_name, league_info in leagues.items():
+            # Call the `startscores` function for each league
+            await startscores(message.channel, league_name, league_info)
 
 @client.command()
-async def startscores(ctx, league_name: str):
-    # Get the channel object that the message was sent in
-    channel = ctx.channel
-    # Get the name of the league from the command arguments
-    league_name = ctx.args[0]
-
-    # Get the info for the league from the `leagues` dictionary
-    league_info = leagues[league_name]
-
+async def startscores(channel, league_name: str, league_info):
     # Send a confirmation message
-    await channel.send('The `startscores` command has been received. The bot will now start sending messages.')
+    await channel.send(f'The `startscores` command has been received for {league_name}. The bot will now start sending messages.')
 
     # Use a while loop to keep sending messages until the `!stopscores` command is received
     while True:
