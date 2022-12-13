@@ -51,6 +51,9 @@ async def startscores(ctx):
     # Get the channel object that the message was sent in
     channel = ctx.channel
 
+    # Send a confirmation message
+    await channel.send('The `startscores` command has been received. The bot will now start sending messages.')
+
     # Use a while loop to keep sending messages until the `!stopscores` command is received
     while True:
         # Get the latest messages sent in the channel
@@ -68,6 +71,16 @@ async def startscores(ctx):
 
         # Sleep for a few seconds before sending the next message
         time.sleep(5)
+
+# Define a command that the bot can respond to
+@client.command()
+async def stopscores(ctx):
+    # Get the channel object that the message was sent in
+    channel = ctx.channel
+
+    # Send a confirmation message
+    await channel.send('The `stopscores` command has been received. The bot will now stop sending messages.')
+
 
 
 # Define a command that the bot can respond to
