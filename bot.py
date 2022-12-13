@@ -76,8 +76,8 @@ async def startscores(ctx):
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Find the home and away scores for the first game on the scoreboard
-        home_team_score_element = soup.select_one('.class="Scoreboard__Column flex-auto Scoreboard__Column--1 Scoreboard__Column--Score"')
-        away_team_score_element = soup.select_one('.class="Scoreboard__Column flex-auto Scoreboard__Column--1 Scoreboard__Column--Score"')
+        home_team_score_element = soup.select_one('.Scoreboard__Column flex-auto Scoreboard__Column--1 Scoreboard__Column--Score')
+        away_team_score_element = soup.select_one('.Scoreboard__Column flex-auto Scoreboard__Column--1 Scoreboard__Column--Score')
         home_score = home_team_score_element.text
         away_score = away_team_score_element.text
 
