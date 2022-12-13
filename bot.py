@@ -46,8 +46,15 @@ async def on_message(message):
 
 # Define a command that the bot can respond to
 @client.command()
-async def sports_alert(ctx):
-    # Indented code goes here
+async def sports_alert(ctx, leagues):
+    # Iterate over the leagues and extract the scores of each game
+    for league, info in leagues.items():
+    # Use the requests library to fetch the HTML of the ESPN scores page for the league
+        response = requests.get(info['url'])
+    # Iterate over the leagues and extract the scores of each game
+    for league, info in leagues.items():
+    # Use the requests library to fetch the HTML of the ESPN scores page for the league
+        response = requests.get(info['url'])
     leagues = {
         'NFL': {
             'url': 'http://www.espn.com/nfl/scoreboard',
@@ -70,17 +77,6 @@ async def sports_alert(ctx):
             'is_close': lambda home_score, away_score, time_remaining: abs(int(home_score) - int(away_score)) <= 5 and time_remaining == '4th' and minutes <= 5
         }
 }
-@client.command()
-async def sports_alert(ctx, leagues):
-    # Iterate over the leagues and extract the scores of each game
-    for league, info in leagues.items():
-    # Use the requests library to fetch the HTML of the ESPN scores page for the league
-        response = requests.get(info['url'])
-    # Iterate over the leagues and extract the scores of each game
-    for league, info in leagues.items():
-    # Use the requests library to fetch the HTML of the ESPN scores page for the league
-        response = requests.get(info['url'])
-
     # Parse the HTML using the BeautifulSoup library
     soup = BeautifulSoup(response.text, 'html.parser')
 
