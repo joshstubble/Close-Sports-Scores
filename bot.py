@@ -28,7 +28,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!startscores'):
+    if message.content == '!startscores':
         # Get the channel object that the message was sent in
         channel = message.channel
 
