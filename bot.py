@@ -79,20 +79,20 @@ async def startscores(ctx):
 
         # Iterate over the containers and extract the scores of each game
         for container in containers:
-        # Find the minutes remaining in the game
-        minutes = container.find(class_='minutes').text
+            # Find the minutes remaining in the game
+            minutes = container.find(class_='minutes').text
         
-        # Find the inning number
-        innings = container.find(class_='innings').text
+            # Find the inning number
+            innings = container.find(class_='innings').text
         
-        # Find the home team score
-        home_score = container.find(class_='home').find(class_='score').text
+            # Find the home team score
+            home_score = container.find(class_='home').find(class_='score').text
 
-        # Find the away team score
-        away_score = container.find(class_='away').find(class_='score').text
+            # Find the away team score
+            away_score = container.find(class_='away').find(class_='score').text
 
-        # Find the time remaining in the game
-        time_remaining = container.find(class_='time-remaining').text
+            # Find the time remaining in the game
+            time_remaining = container.find(class_='time-remaining').text
 
         # Check if the game is considered "close" based on the criteria defined in the `leagues` dictionary
         if info['is_close'](home_score, away_score, time_remaining):
