@@ -12,8 +12,8 @@ logging.basicConfig(level=logging.DEBUG)
 # Create a logger that will be used to log messages
 logger = logging.getLogger(__name__)
 
-# Create an instance of the Intents class with the default set of privileged intents
-intents = discord.Intents.default()
+# Create an instance of the Intents class with all the privileged intents enabled
+intents = discord.Intents(guilds=True, members=True, bans=True, emojis=True, integrations=True, webhooks=True, invites=True, voice_states=True, presences=True, messages=True, reactions=True)
 
 # Create a Discord bot
 client = commands.Bot(command_prefix = '!', intents=intents)
